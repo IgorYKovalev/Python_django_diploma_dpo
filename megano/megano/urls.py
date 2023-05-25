@@ -10,6 +10,7 @@ urlpatterns = [
     path('api/', include('app_auth.urls')),
     # path('api/', include('app_user.urls')),
     path('api/', include('app_shop.urls')),
+    path('api/', include('app_order.urls')),
     path('api/', include("api.urls")),
     path("", include("frontend.urls")),
 ]

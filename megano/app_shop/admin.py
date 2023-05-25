@@ -1,5 +1,15 @@
 from django.contrib import admin
-from app_shop.models import Category, Product, Shop, Subcategories, Review, Specification, Tag, ImageProduct
+from app_shop.models import (
+    Category,
+    Product,
+    Shop,
+    Subcategories,
+    Review,
+    Specification,
+    Tag,
+    ImageProduct,
+    Sales,
+)
 
 
 @admin.register(Shop)
@@ -86,6 +96,21 @@ class ProductAdmin(admin.ModelAdmin):
             ReviewTabularInline,
         ]
 
+
+@admin.register(Sales)
+class SalesAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'title',
+        'price',
+        'salePrice',
+        'dateFrom',
+        'dateTo',
+    ]
+    list_display_links = ['title']
+    inlines = [
+        ImageProductTabularInline,
+    ]
 
 # @admin.register(ImageProduct)
 # class ProductImagesAdmin(admin.ModelAdmin):

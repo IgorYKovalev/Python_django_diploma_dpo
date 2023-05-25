@@ -46,6 +46,26 @@ def signUp(request):
             return HttpResponse(status=500)
 
 
+class ChangePasswordView(GenericAPIView):
+    queryset = ProfileUser.objects.all()
+    serializer_class = ChangePasswordSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        profile = ProfileUser.objects.get(pk=request.user.pk)
+        request_data = self.serializer_class(data=request.data)
+
+        if request_data.is_valid():
+            if not profile.check_password(request_data.data.get('passwordCurrent')):
+                return Response(data={'passwordCurrent': 'Неверный пароль'}, status=status.HTTP_400_BAD_REQUEST)
+            elif request_data.data.get('password') != request_data.data.get('passwordReply'):
+                return Response(data={'password': 'Неверный пароль'}, status=status.HTTP_400_BAD_REQUEST)
+            profile.set_password(request_data.data.get('password'))
+            profile.save()
+            return Response(data={'password': request_data.data.get('password')}, status=status.HTTP_200_OK)
+        return Response(data=request_data.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class ProfileGetAndPostView(APIView):
     queryset = ProfileUser.objects.all()
     serializer_class = ChangeInfoSerializer
@@ -108,26 +128,6 @@ class ProfileGetAndPostView(APIView):
                         status=status.HTTP_200_OK
                     )
             return Response(data=request_data.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ChangePasswordView(GenericAPIView):
-    queryset = ProfileUser.objects.all()
-    serializer_class = ChangePasswordSerializer
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request, *args, **kwargs):
-        profile = ProfileUser.objects.get(pk=request.user.pk)
-        request_data = self.serializer_class(data=request.data)
-
-        if request_data.is_valid():
-            if not profile.check_password(request_data.data.get('passwordCurrent')):
-                return Response(data={'passwordCurrent': 'Неверный пароль'}, status=status.HTTP_400_BAD_REQUEST)
-            elif request_data.data.get('password') != request_data.data.get('passwordReply'):
-                return Response(data={'password': 'Неверный пароль'}, status=status.HTTP_400_BAD_REQUEST)
-            profile.set_password(request_data.data.get('password'))
-            profile.save()
-            return Response(data={'password': request_data.data.get('password')}, status=status.HTTP_200_OK)
-        return Response(data=request_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChangeAvatarView(APIView):

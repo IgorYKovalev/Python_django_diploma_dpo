@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # 'app_user.apps.AppUserConfig',
     'app_auth.apps.AppAuthConfig',
     'app_shop.apps.AppShopConfig',
+    'app_order.apps.AppOrderConfig',
 ]
 
 MIDDLEWARE = [
@@ -119,7 +120,6 @@ USE_TZ = True
 
 AUTH_USER_MODEL = "app_auth.ProfileUser"
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -145,12 +145,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # }
 
 
-REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ],
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ]
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_RENDERER_CLASSES': [
+#         'rest_framework.renderers.JSONRenderer',
+#         'rest_framework.renderers.BrowsableAPIRenderer',
+#     ],
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticated',
+#     ],
+# }
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_PAGINATION_CLASS': 'my_project.apps.core.pagination.CustomPageNumber',
+#     'PAGE_SIZE': 100
+# }

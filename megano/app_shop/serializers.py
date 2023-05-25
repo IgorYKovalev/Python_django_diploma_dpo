@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app_shop.models import Category, Subcategories, Product, Review, Tag, ImageProduct, Specification
+from app_shop.models import Category, Subcategories, Product, Review, Tag, ImageProduct, Specification, Sales
 
 
 class CustomField(serializers.Field):
@@ -98,15 +98,25 @@ class ReviewSerializer(serializers.ModelSerializer):
         ]
 
 
-class CustomProductField(serializers.Field):
+class ImageStringField(serializers.StringRelatedField):
     def to_representation(self, value):
-        ret = [str(value.name)]
-        return ret
+        return {
+            "src": str(value.src.url),
+            "alt": str(value.pk)
+        }
+
+
+class TagsStringField(serializers.StringRelatedField):
+    def to_representation(self, value):
+        return {
+            "id": value.pk,
+            "name": str(value.name)
+        }
 
 
 class ProductFullSerializer(serializers.ModelSerializer):
-    images = CustomProductField()
-    tags = CustomProductField()
+    images = ImageStringField(many=True)
+    tags = TagsStringField(many=True)
     reviews = ReviewSerializer(many=True, source='review')
     specifications = SpecificationSerializer(many=True)
 
@@ -129,3 +139,51 @@ class ProductFullSerializer(serializers.ModelSerializer):
             'rating',
         ]
 
+
+class ImageSaleStringField(serializers.StringRelatedField):
+    def to_representation(self, value):
+        return {
+            "src": str(value.src.url),
+            "alt": str(value.alt)
+        }
+
+
+class SalesSerializer(serializers.ModelSerializer):
+    id = serializers.CharField()
+    images = ImageSaleStringField(many=True)
+
+    class Meta:
+        model = Sales
+        fields = [
+            "id",
+            "price",
+            "salePrice",
+            "dateFrom",
+            "dateTo",
+            "title",
+            "images",
+        ]
+
+
+class CatalogSerializer(serializers.ModelSerializer):
+    images = ImageStringField(many=True)
+    tags = TagsStringField(many=True)
+    reviews = ReviewSerializer(many=True, source='review')
+
+    class Meta:
+        model = Product
+        fields = [
+            'id',
+            'category',
+            'price',
+            'count',
+            'date',
+            'title',
+            'description',
+            'fullDescription',
+            'freeDelivery',
+            'images',
+            'tags',
+            'reviews',
+            'rating',
+        ]

@@ -3,12 +3,18 @@ from app_auth.models import ProfileUser
 
 
 class ChangeInfoSerializer(serializers.ModelSerializer):
-    fullName = serializers.CharField(max_length=100, required=False)
-    phone = serializers.CharField(max_length=10,
-                                  validators=[ProfileUser.phone_number_validator],
-                                  required=False
-                                  )
-    email = serializers.EmailField(required=False)
+    fullName = serializers.CharField(
+        max_length=100,
+        required=False
+    )
+    phone = serializers.CharField(
+        max_length=10,
+        validators=[ProfileUser.phone_number_validator],
+        required=False
+    )
+    email = serializers.EmailField(
+        required=False
+    )
 
     class Meta:
         model = ProfileUser
@@ -16,9 +22,15 @@ class ChangeInfoSerializer(serializers.ModelSerializer):
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
-    passwordCurrent = serializers.CharField(required=True)
-    password = serializers.CharField(required=True)
-    passwordReply = serializers.CharField(required=True)
+    passwordCurrent = serializers.CharField(
+        required=True
+    )
+    password = serializers.CharField(
+        required=True
+    )
+    passwordReply = serializers.CharField(
+        required=True
+    )
 
     class Meta:
         model = ProfileUser
